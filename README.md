@@ -30,6 +30,7 @@ Stores user data and notes persistently.
 - 📈 Easy to scale and extend  
 - 🛠️ Ideal for learning **DevOps & Microservices**
 
+---
 
 ▶️ How to Run the Application (Using Docker)
 
@@ -44,23 +45,25 @@ Make sure you have Docker and Docker Compose installed on your system.
 
 You can verify installation using:
 
-'''
+```
 docker --version
 docker compose version
-'''
+```
+
+---
 
 🚀 Steps to Run the App
 
 1️⃣ Clone the repository
-'''
+```
 git clone https://github.com/AZAL-KHAN/notes-app-microservices.git
 cd notes-app-microservices
-'''
+```
 
 2️⃣ Start all services using Docker Compose
-'''
+```
 docker compose up --build
-'''
+```
 This command will:
 
 - Build images for all microservices
@@ -72,9 +75,12 @@ This command will:
 3️⃣ Access the application
 
 - Open your browser and go to:
-  '''
+  ```
   http://localhost:8080
-  '''
+  ```
+
+---
+
 
 🧪 How to Use the App
 
@@ -88,12 +94,16 @@ This command will:
 
 - 🔒 Notes are accessible only to the logged-in user
 
-- ⏹️ Stop the Application
+---
+
+ ⏹️ Stop the Application
 
 To stop all running containers:
-'''
+```
 docker compose down
-'''
+```
+
+---
 
 💡 Notes
 
