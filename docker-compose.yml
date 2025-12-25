@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: notesdb
+    volumes:
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  auth-service:
+    build: ./auth-service
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: notesdb
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  backend-service:
+    build: ./backend-service
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: notesdb
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend-service:
+    build: ./frontend-service
+    environment:
+      AUTH_URL: http://auth-service:5000
+      API_URL: http://backend-service:5000
+    depends_on:
+      - auth-service
+      - backend-service
+    ports:
+      - "8080:5000"

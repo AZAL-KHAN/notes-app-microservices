@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Note Detail</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <div class="card">
+
+    <!-- Top Row: Back & Delete -->
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div class="back" onclick="location.href='/notes'">
+        ←
+      </div>
+
+      <div class="delete" onclick="document.getElementById('delete-form').submit()">
+        Delete
+      </div>
+    </div>
+
+    <h1>My Notes</h1>
+
+    <p style="color:#ff7a3d; font-weight:bold; margin-top:10px;">
+      Note #{{ note.display_no }}
+    </p>
+
+    <p style="margin:15px 0; line-height:1.5;">
+      {{ note.content }}
+    </p>
+
+    <small style="color:#aaa;">
+      {{ note.created_at }}
+    </small>
+
+    <!-- Delete Form -->
+    <form id="delete-form" method="post"></form>
+
+  </div>
+
+</body>
+</html>

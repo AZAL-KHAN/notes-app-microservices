@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Notes</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/script.js" defer></script>
+</head>
+<body>
+
+  <div class="card">
+
+    <!-- User Info + Logout -->
+    <div style="text-align:center; margin-bottom:15px;">
+      <div style="color:#ff7a3d; font-weight:bold;">
+        {{ user_email }}
+      </div>
+      <a href="/logout" style="color:#aaa; font-size:14px;">
+        Logout
+      </a>
+    </div>
+
+    <h1>My Notes</h1>
+
+    {% if notes|length == 0 %}
+      <p style="color:#aaa; text-align:center;">No notes yet</p>
+    {% endif %}
+
+    {% for n in notes %}
+      <div class="note" onclick="location.href='/notes/{{ n.display_no }}'">
+        <span>Note #{{ n.display_no }}</span>
+        <div>{{ n.content }}</div>
+        <small>{{ n.created_at }}</small>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Floating + Button -->
+  <button class="add-btn" onclick="openModal()">+</button>
+
+  <!-- New Note Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h2>New Note</h2>
+
+      <form method="post">
+        <textarea
+          id="note-textarea"
+          name="content"
+          placeholder="Write your note here..."
+          required></textarea>
+
+        <div class="modal-actions">
+          <button type="submit" class="btn save">Save</button>
+          <button
+            type="button"
+            class="btn cancel"
+            onclick="closeModal()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>
