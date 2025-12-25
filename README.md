@@ -115,3 +115,13 @@ All services run in isolated containers
 MySQL data is managed by Docker volumes
 
 Ideal setup for learning Docker, Microservices, and DevOps workflows
+
+---
+
+## 📸 Application Screenshots
+
+### 📝 Notes Dashboard
+![Notes Dashboard](images/dashboard.png)
+
+### 📄 Notes Detail View
+![Notes Detail View](images/note-detail.png)
