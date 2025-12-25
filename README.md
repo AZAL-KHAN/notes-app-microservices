@@ -123,5 +123,7 @@ Ideal setup for learning Docker, Microservices, and DevOps workflows
 ### 📝 Notes Dashboard
 ![Notes Dashboard](images/dashboard.png)
 
+---
+
 ### 📄 Notes Detail View
 ![Notes Detail View](images/note-detail.png)
