@@ -9,6 +9,8 @@ Notes App Microservices is a simple and scalable notes application built using *
 - 🐬 MySQL – Database  
 - 🐳 Docker & Docker Compose – Containerization  
 
+---
+
 ### 🧩 Microservices Overview
 The application consists of **4 independent microservices**, each with a clear responsibility:
 
@@ -30,6 +32,7 @@ Stores user data and notes persistently.
 - 📈 Easy to scale and extend  
 - 🛠️ Ideal for learning **DevOps & Microservices**
 
+---
 ---
 
 ▶️ How to Run the Application (Using Docker)
