@@ -3,10 +3,15 @@ version: "3.9"
 services:
   mysql:
     image: mysql:8.0
+    container_name: notes-app-mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: notesdb
     volumes:
+      # ✅ Persistent MySQL data
+      - mysql-data:/var/lib/mysql
+
+      # ✅ Run only once for DB initialization
       - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
@@ -15,7 +20,9 @@ services:
       retries: 10
 
   auth-service:
+    image: flask-notes-app-auth:v1
     build: ./auth-service
+    container_name: notes-app-auth
     environment:
       DB_HOST: mysql
       DB_USER: root
@@ -26,7 +33,9 @@ services:
         condition: service_healthy
 
   backend-service:
+    image: flask-notes-app-backend:v1
     build: ./backend-service
+    container_name: notes-app-backend
     environment:
       DB_HOST: mysql
       DB_USER: root
@@ -37,7 +46,9 @@ services:
         condition: service_healthy
 
   frontend-service:
+    image: flask-notes-app-frontend:v1
     build: ./frontend-service
+    container_name: notes-app-frontend
     environment:
       AUTH_URL: http://auth-service:5000
       API_URL: http://backend-service:5000
@@ -46,3 +57,7 @@ services:
       - backend-service
     ports:
       - "8080:5000"
+
+# ✅ Named volume (managed by Docker)
+volumes:
+  mysql-data:
