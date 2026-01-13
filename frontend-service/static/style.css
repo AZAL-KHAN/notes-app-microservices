@@ -5,35 +5,59 @@
   font-family: "Poppins", sans-serif;
 }
 
+/* ===============================
+   NORMAL DARK MODE COLORS
+================================ */
+:root {
+  --bg-main: #1f2328;       /* page background */
+  --bg-card: #2b3137;       /* main card */
+  --bg-note: #323840;       /* note item */
+  --bg-note-hover: #3a414a;
+
+  --text-primary: #e6edf3;
+  --text-secondary: #9da7b1;
+
+  --accent: #ff7a3d;
+}
+
+/* ===============================
+   BODY
+================================ */
 body {
-  background-color: #0f0f0f;
-  color: #ffffff;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Main Card */
+/* ===============================
+   MAIN CARD
+================================ */
 .card {
-  background: #1c1c1c;
+  background: var(--bg-card);
   padding: 30px;
   border-radius: 14px;
   width: 360px;
   text-align: left;
-  box-shadow: 0 0 25px rgba(255, 122, 61, 0.18);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
-/* Headings */
+/* ===============================
+   HEADINGS
+================================ */
 .card h1 {
   text-align: center;
   margin: 15px 0 20px;
   font-size: 24px;
 }
 
-/* Notes list item */
+/* ===============================
+   NOTES LIST ITEM
+================================ */
 .note {
-  background: #262626;
+  background: var(--bg-note);
   padding: 14px;
   border-radius: 10px;
   margin-bottom: 12px;
@@ -42,11 +66,11 @@ body {
 }
 
 .note:hover {
-  background: #2f2f2f;
+  background: var(--bg-note-hover);
 }
 
 .note span {
-  color: #ff7a3d;
+  color: var(--accent);
   font-weight: bold;
   display: block;
 }
@@ -54,11 +78,13 @@ body {
 .note small {
   display: block;
   margin-top: 6px;
-  color: #aaa;
+  color: var(--text-secondary);
   font-size: 13px;
 }
 
-/* Floating + button */
+/* ===============================
+   FLOATING ADD BUTTON
+================================ */
 .add-btn {
   position: fixed;
   bottom: 30px;
@@ -67,33 +93,35 @@ body {
   height: 56px;
   border-radius: 50%;
   border: none;
-  background: #ff7a3d;
-  color: #fff;
+  background: var(--accent);
+  color: #000;
   font-size: 28px;
   cursor: pointer;
-  box-shadow: 0 0 18px rgba(255, 122, 61, 0.7);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
 }
 
-/* Modal */
+/* ===============================
+   MODAL
+================================ */
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(31, 35, 40, 0.85);
   display: none;
   justify-content: center;
   align-items: center;
 }
 
 .modal-content {
-  background: #1c1c1c;
+  background: var(--bg-card);
   padding: 25px;
   border-radius: 14px;
   width: 350px;
-  box-shadow: 0 0 25px rgba(255, 122, 61, 0.3);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
 }
 
 .modal-content h2 {
-  color: #ff7a3d;
+  color: var(--accent);
   margin-bottom: 15px;
   text-align: center;
 }
@@ -101,15 +129,17 @@ body {
 textarea {
   width: 100%;
   height: 110px;
-  background: #262626;
-  color: #fff;
+  background: var(--bg-note);
+  color: var(--text-primary);
   border: none;
   padding: 10px;
   border-radius: 8px;
   resize: none;
 }
 
-/* Buttons */
+/* ===============================
+   BUTTONS
+================================ */
 .modal-actions {
   margin-top: 15px;
   display: flex;
@@ -125,20 +155,22 @@ textarea {
 }
 
 .btn.save {
-  background: #ff7a3d;
-  color: #fff;
+  background: var(--accent);
+  color: #000;
 }
 
 .btn.cancel {
-  background: #444;
+  background: #4b5563;
   color: #fff;
 }
 
-/* 🔙 BIG BACK BUTTON (DETAIL VIEW) */
+/* ===============================
+   BACK BUTTON
+================================ */
 .back {
   font-size: 28px;
   font-weight: bold;
-  color: #ff7a3d;
+  color: var(--accent);
   cursor: pointer;
   padding: 6px 12px;
   border-radius: 8px;
@@ -146,12 +178,14 @@ textarea {
 }
 
 .back:hover {
-  background: rgba(255, 122, 61, 0.18);
+  background: rgba(255, 122, 61, 0.2);
 }
 
-/* Delete button */
+/* ===============================
+   DELETE BUTTON
+================================ */
 .delete {
-  color: #ff7a3d;
+  color: var(--accent);
   cursor: pointer;
   font-weight: 500;
 }
