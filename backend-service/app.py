@@ -1,46 +1,54 @@
 from flask import Flask, request, jsonify
-import mysql.connector, os, time
+import mysql.connector
+import os
+import time
 from datetime import date, datetime
 
 app = Flask(__name__)
 
-# ---------------- DB CONNECTION WITH RETRY ----------------
-def get_db():
+# ---------------------------------------------------
+# MySQL Connection (AUTO-RECONNECT, K8s SAFE)
+# ---------------------------------------------------
+def get_connection(dict_cursor=False):
     while True:
         try:
-            return mysql.connector.connect(
+            conn = mysql.connector.connect(
                 host=os.environ["DB_HOST"],
                 user=os.environ["DB_USER"],
                 password=os.environ["DB_PASSWORD"],
-                database=os.environ["DB_NAME"]
+                database=os.environ["DB_NAME"],
+                autocommit=True
             )
-        except mysql.connector.Error:
-            print("⏳ backend-service waiting for MySQL...")
+            cursor = conn.cursor(dictionary=dict_cursor)
+            return conn, cursor
+        except mysql.connector.Error as e:
+            print("⏳ Backend waiting for MySQL...", e)
             time.sleep(3)
 
-db = get_db()
-
-# ---------------- FETCH NOTES (WITH DATE FORMAT FIX) ----------------
+# ---------------------------------------------------
+# Fetch Notes (with date formatting)
+# ---------------------------------------------------
 def fetch_notes(user_id):
-    cur = db.cursor(dictionary=True)
+    conn, cur = get_connection(dict_cursor=True)
+
     cur.execute(
         "SELECT * FROM notes WHERE user_id=%s ORDER BY id",
         (user_id,)
     )
     notes = cur.fetchall()
 
-    for i, n in enumerate(notes):
-        # Display number
-        n["display_no"] = i + 1
+    for i, note in enumerate(notes):
+        note["display_no"] = i + 1
+        if isinstance(note["created_at"], (date, datetime)):
+            note["created_at"] = note["created_at"].strftime("%d/%m/%Y")
 
-        # ✅ FORMAT DATE AS DD/MM/YYYY
-        if isinstance(n["created_at"], (date, datetime)):
-            n["created_at"] = n["created_at"].strftime("%d/%m/%Y")
-
+    cur.close()
+    conn.close()
     return notes
 
-
-# ---------------- NOTES LIST & CREATE ----------------
+# ---------------------------------------------------
+# Notes List & Create
+# ---------------------------------------------------
 @app.route("/notes", methods=["GET", "POST"])
 def notes():
     user_id = request.headers.get("X-USER-ID")
@@ -49,17 +57,19 @@ def notes():
         return jsonify({"error": "Unauthorized"}), 401
 
     if request.method == "POST":
-        cur = db.cursor()
+        conn, cur = get_connection()
         cur.execute(
             "INSERT INTO notes (user_id, content, created_at) VALUES (%s, %s, %s)",
             (user_id, request.json["content"], date.today())
         )
-        db.commit()
+        cur.close()
+        conn.close()
 
     return jsonify(fetch_notes(user_id))
 
-
-# ---------------- NOTE DETAIL & DELETE ----------------
+# ---------------------------------------------------
+# Note Detail & Delete
+# ---------------------------------------------------
 @app.route("/notes/<int:index>", methods=["GET", "DELETE"])
 def note_detail(index):
     user_id = request.headers.get("X-USER-ID")
@@ -75,12 +85,16 @@ def note_detail(index):
     note = notes[index - 1]
 
     if request.method == "DELETE":
-        cur = db.cursor()
+        conn, cur = get_connection()
         cur.execute("DELETE FROM notes WHERE id=%s", (note["id"],))
-        db.commit()
+        cur.close()
+        conn.close()
         return jsonify({"status": "deleted"})
 
     return jsonify(note)
 
-
-app.run(host="0.0.0.0", port=5000)
+# ---------------------------------------------------
+# App Start
+# ---------------------------------------------------
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
