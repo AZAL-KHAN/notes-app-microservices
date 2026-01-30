@@ -78,7 +78,6 @@ pipeline {
 
             kubectl apply -f k8s/namespace.yml
             kubectl apply -R -f k8s/
-
           '''
         }
       }
@@ -91,30 +90,45 @@ pipeline {
       emailext(
         subject: "❌ Jenkins Build Failed: ${JOB_NAME} #${BUILD_NUMBER}",
         body: """
-Hello,
 
 The Jenkins build has FAILED.
 
-Job Name  : ${JOB_NAME}
-Build No  : ${BUILD_NUMBER}
+Job Name : ${JOB_NAME}
+Build No : ${BUILD_NUMBER}
 
-Check the build logs here:
+Check logs:
 ${BUILD_URL}
 
-Regards,
-Jenkins
 """,
-        to: "your-email@example.com"
+        to: "askazal786@gmail.com"
       )
+    }
+
+    fixed {
+      emailext(
+        subject: "✅ Jenkins Build Fixed: ${JOB_NAME} #${BUILD_NUMBER}",
+        body: """
+
+The Jenkins build is BACK TO NORMAL.
+
+Job Name : ${JOB_NAME}
+Build No : ${BUILD_NUMBER}
+
+View build:
+${BUILD_URL}
+
+""",
+        to: "askazal786@gmail.com"
+      )
+    }
+
+    success {
+      echo "✅ Successfully deployed build ${IMAGE_TAG} to EKS"
     }
 
     always {
       sh 'docker logout || true'
       cleanWs()
-    }
-
-    success {
-      echo "✅ Successfully deployed build ${IMAGE_TAG} to EKS"
     }
   }
 }
